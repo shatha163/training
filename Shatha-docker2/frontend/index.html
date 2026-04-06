@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome Page</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 100px;
+            background-color: #f0f0f0;
+        }
+
+        input {
+            padding: 10px;
+            width: 200px;
+            margin: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #333;
+        }
+
+        /* ✨ نفس الثيم + تنسيق القائمة */
+        #list {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+
+</head>
+<body>
+
+    <h2>Enter Your Name</h2>
+
+    <input type="text" id="nameInput" placeholder="Your name">
+    <br>
+
+    <button onclick="showMessage()">Send</button>
+
+    <p id="message"></p>
+
+    <!-- ✨ مكان عرض الأسماء -->
+    <div id="list"></div>
+
+    <script>
+        async function showMessage() {
+            let name = document.getElementById("nameInput").value;
+
+            // نفس الرسالة القديمة (ما حذفناها)
+            document.getElementById("message").innerText = "Welcome " + name;
+
+            // إرسال الاسم
+            await fetch("http://localhost:3000/add-name", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ name })
+            });
+
+            // جلب الأسماء
+            let res = await fetch("http://localhost:3000/names");
+            let data = await res.json();
+
+            // عرض الأسماء (بدون تغيير الثيم)
+            let html = data.map(n => `<p>${n.name}</p>`).join("");
+            document.getElementById("list").innerHTML = html;
+        }
+    </script>
+
+</body>
+</html>
