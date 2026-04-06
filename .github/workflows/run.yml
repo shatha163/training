@@ -1,11 +1,13 @@
-name: Run Code
+name: Run Docker Compose
 
 on: push
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  run-docker:
+    runs-on: self-hosted
 
     steps:
-      - uses: actions/checkout@v3
-      - run: echo "Runner is working 🔥"
+      - name: Run docker compose
+        run: |
+          cd /home/cybersecurity/Desktop/Shatha-docker2
+          docker compose up -d
